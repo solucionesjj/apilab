@@ -7,7 +7,7 @@ from sqlalchemy import text
 
 # Obtener credenciales de variables de entorno o usar valores por defecto
 DB_USER = os.getenv("DB_USER", "root")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "LaMig2314") # Cambia esto por tu contraseña
+DB_PASSWORD = os.getenv("DB_PASSWORD", "LaMig2314") 
 DB_HOST = os.getenv("DB_HOST", "localhost")
 DB_PORT = os.getenv("DB_PORT", "3306")
 DB_NAME = os.getenv("DB_NAME", "apilab")

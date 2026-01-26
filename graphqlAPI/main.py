@@ -1,11 +1,25 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 from strawberry.fastapi import GraphQLRouter
 from contextlib import asynccontextmanager
 from datetime import datetime
 from sqlmodel import select
 from database import init_db, get_session
-from models import Producto, Usuario, ProductoCreate, ProductoUpdate
+from models import Producto, ProductoCreate, ProductoUpdate
 from schema import schema
+import logging
+import time
+import sys
+
+# Configuración de Logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
+logger = logging.getLogger(__name__)
 
 # Seed data from user requirements
 SEED_PRODUCTS = [
@@ -44,6 +58,29 @@ async def lifespan(app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+
+# Middleware para logging de requests
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = time.time()
+    try:
+        response = await call_next(request)
+        process_time = (time.time() - start_time) * 1000
+        logger.info(f"Path: {request.url.path} Method: {request.method} Status: {response.status_code} Duration: {process_time:.2f}ms")
+        return response
+    except Exception as e:
+        process_time = (time.time() - start_time) * 1000
+        logger.error(f"Path: {request.url.path} Method: {request.method} Duration: {process_time:.2f}ms Error: {str(e)}", exc_info=True)
+        raise
+
+# Global Exception Handler
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Global exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error", "error": str(exc)},
+    )
 
 graphql_app = GraphQLRouter(schema)
 
@@ -90,4 +127,7 @@ async def delete_product(id: int):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    # Se obtiene el puerto de la variable de entorno PORT o se usa 8000 por defecto
+    import os
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)

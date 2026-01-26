@@ -34,7 +34,6 @@ echo.
 echo [INFO] Starting the server...
 echo [INFO] GraphQL Playground: http://127.0.0.1:8000/graphql
 echo [INFO] REST Products:      http://127.0.0.1:8000/api/v1/productos/
-echo [INFO] REST Users:         http://127.0.0.1:8000/api/v1/usuarios/
 echo.
 echo Press Ctrl+C to stop the server.
 echo.

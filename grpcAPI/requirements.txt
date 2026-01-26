@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+sqlmodel
+pymysql
+grpcio
+grpcio-tools
+python-dotenv
+cryptography
+email-validator
