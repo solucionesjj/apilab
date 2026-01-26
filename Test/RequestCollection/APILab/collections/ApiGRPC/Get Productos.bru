@@ -1,0 +1,21 @@
+meta {
+  name: Get Productos
+  type: grpc
+  seq: 1
+}
+
+grpc {
+  url: {{url}}
+  method: /product.ProductService/ListProducts
+  body: grpc
+  protoPath: ../../../../../../../../../../dev/apilab/grpcAPI/protos/product.proto
+  auth: none
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {}
+  '''
+}

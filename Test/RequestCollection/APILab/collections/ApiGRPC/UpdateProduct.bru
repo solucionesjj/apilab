@@ -1,0 +1,26 @@
+meta {
+  name: UpdateProduct
+  type: grpc
+  seq: 4
+}
+
+grpc {
+  url: {{url}}
+  method: /product.ProductService/UpdateProduct
+  body: grpc
+  protoPath: ../../../../../../../../../../dev/apilab/grpcAPI/protos/product.proto
+  auth: inherit
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {
+      "id": 6,
+      "nombre": "Mouse 222",
+      "descripcion": "Mouse pro",
+      "precio": 38
+    }
+  '''
+}

@@ -1,0 +1,16 @@
+opencollection: 1.0.0
+info:
+  name: "APILab"
+  type: workspace
+
+collections:
+  - name: "ApiGRPC"
+    path: "collections\\ApiGRPC"
+  - name: "ApiREST"
+    path: "collections\\ApiREST"
+  - name: "ApiGRAPHQL"
+    path: "collections\\ApiGRAPHQL"
+
+specs:
+
+docs: ''

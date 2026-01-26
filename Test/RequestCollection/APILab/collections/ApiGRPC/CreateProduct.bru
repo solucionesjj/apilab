@@ -1,0 +1,25 @@
+meta {
+  name: CreateProduct
+  type: grpc
+  seq: 3
+}
+
+grpc {
+  url: {{url}}
+  method: /product.ProductService/CreateProduct
+  body: grpc
+  protoPath: ../../../../../../../../../../dev/apilab/grpcAPI/protos/product.proto
+  auth: inherit
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {
+      "nombre": "Mouse 112",
+      "descripcion": "Mouse gamer",
+      "precio": 30.99
+    }
+  '''
+}

@@ -1,0 +1,23 @@
+meta {
+  name: DeleteProduct
+  type: grpc
+  seq: 5
+}
+
+grpc {
+  url: {{url}}
+  method: /product.ProductService/DeleteProduct
+  body: grpc
+  protoPath: ../../../../../../../../../../dev/apilab/grpcAPI/protos/product.proto
+  auth: inherit
+  methodType: unary
+}
+
+body:grpc {
+  name: message 1
+  content: '''
+    {
+      "id": 6
+    }
+  '''
+}

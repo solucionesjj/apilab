@@ -1,0 +1,19 @@
+{
+  "version": "1",
+  "name": "ApiGRPC",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0,
+  "filesCount": 0,
+  "protobuf": {
+    "protoFiles": [
+      {
+        "path": "../../../../../../../../../../dev/apilab/grpcAPI/protos/product.proto",
+        "type": "file"
+      }
+    ]
+  }
+}
