@@ -20,12 +20,12 @@ from grpc_server import serve_grpc
 async def lifespan(app: FastAPI):
     # Startup
     create_db_and_tables()
-    print("Database initialized.")
+    print("Base de datos inicializada.")
     
     # Start gRPC server in background
     # We create a task for it
     grpc_task = asyncio.create_task(serve_grpc())
-    print("gRPC server task created.")
+    print("Tarea del servidor gRPC creada.")
     
     yield
     
@@ -35,11 +35,11 @@ async def lifespan(app: FastAPI):
     try:
         await grpc_task
     except asyncio.CancelledError:
-        print("gRPC server stopped.")
+        print("Servidor gRPC detenido.")
 
 app = FastAPI(
-    title="Producto API (FastAPI + gRPC)",
-    description="API para mantener entidad Producto usando REST y gRPC",
+    title="API (FastAPI + gRPC)",
+    description="API para mantener entidad Producto usando gRPC",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -60,14 +60,14 @@ def read_products(skip: int = 0, limit: int = 100, session: Session = Depends(ge
 def read_product(product_id: int, session: Session = Depends(get_session)):
     product = session.get(Producto, product_id)
     if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
     return product
 
 @app.put("/products/{product_id}", response_model=Producto)
 def update_product(product_id: int, product_data: Producto, session: Session = Depends(get_session)):
     product = session.get(Producto, product_id)
     if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
     
     product_dict = product_data.model_dump(exclude_unset=True)
     for key, value in product_dict.items():
@@ -83,7 +83,7 @@ def update_product(product_id: int, product_data: Producto, session: Session = D
 def delete_product(product_id: int, session: Session = Depends(get_session)):
     product = session.get(Producto, product_id)
     if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
+        raise HTTPException(status_code=404, detail="Producto no encontrado")
     session.delete(product)
     session.commit()
     return {"ok": True}

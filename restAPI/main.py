@@ -9,32 +9,25 @@ from models import Producto, ProductoCreate, ProductoUpdate
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Ciclo de vida de la aplicación.
-    Se ejecuta al iniciar la API para verificar/crear la BD y tablas.
-    """
     init_db()
     yield
 
 app = FastAPI(
-    title="API de Productos",
-    description="API REST para mantener la entidad Producto usando Python/FastAPI/SQLModel/MySQL",
+    title="API (FastAPI + REST)",
+    description="API para mantener la entidad Producto usando REST",
     version="1.0.0",
     lifespan=lifespan
 )
 
-@app.post("/productos/", response_model=Producto, status_code=201, summary="Crear un nuevo producto")
+@app.post("/products/", response_model=Producto, status_code=201, summary="Crear un nuevo producto")
 def create_producto(producto: ProductoCreate, session: Session = Depends(get_session)):
-    """
-    Crea un nuevo producto en la base de datos.
-    """
     db_producto = Producto.model_validate(producto)
     session.add(db_producto)
     session.commit()
     session.refresh(db_producto)
     return db_producto
 
-@app.get("/productos/", response_model=List[Producto], summary="Listar productos")
+@app.get("/products/", response_model=List[Producto], summary="Listar productos")
 def read_productos(
     offset: int = 0, 
     limit: int = Query(default=100, le=100), 
@@ -46,7 +39,7 @@ def read_productos(
     productos = session.exec(select(Producto).offset(offset).limit(limit)).all()
     return productos
 
-@app.get("/productos/{producto_id}", response_model=Producto, summary="Obtener un producto por ID")
+@app.get("/products/{producto_id}", response_model=Producto, summary="Obtener un producto por ID")
 def read_producto(producto_id: int, session: Session = Depends(get_session)):
     """
     Obtiene el detalle de un producto específico.
@@ -56,7 +49,7 @@ def read_producto(producto_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Producto no encontrado")
     return producto
 
-@app.patch("/productos/{producto_id}", response_model=Producto, summary="Actualizar un producto")
+@app.patch("/products/{producto_id}", response_model=Producto, summary="Actualizar un producto")
 def update_producto(producto_id: int, producto_update: ProductoUpdate, session: Session = Depends(get_session)):
     """
     Actualiza parcialmente un producto existente.
@@ -77,7 +70,7 @@ def update_producto(producto_id: int, producto_update: ProductoUpdate, session: 
     session.refresh(db_producto)
     return db_producto
 
-@app.delete("/productos/{producto_id}", summary="Eliminar un producto")
+@app.delete("/products/{producto_id}", summary="Eliminar un producto")
 def delete_producto(producto_id: int, session: Session = Depends(get_session)):
     """
     Elimina un producto de la base de datos.

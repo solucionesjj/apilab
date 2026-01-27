@@ -1,8 +1,6 @@
 import grpc
 from sqlmodel import Session, select
 from datetime import datetime
-
-# Adjust import based on where this file is run
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -45,19 +43,14 @@ class ProductServicer(product_pb2_grpc.ProductServiceServicer):
         with self._get_session() as session:
             product = session.get(Producto, request.id)
             if not product:
-                context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
+                context.abort(grpc.StatusCode.NOT_FOUND, "Producto no encontrado")
             return self._model_to_response(product)
 
     async def UpdateProduct(self, request, context):
         with self._get_session() as session:
             product = session.get(Producto, request.id)
             if not product:
-                context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
-            
-            # Update fields if provided (in proto, empty string/0 might mean not set, 
-            # but here we assume all fields are sent or we update what we have. 
-            # For simplicity, we update all non-empty/default or just all.)
-            # A common pattern is to use FieldMask, but for this simple task:
+                context.abort(grpc.StatusCode.NOT_FOUND, "Producto no encontrado")
             if request.nombre:
                 product.nombre = request.nombre
             if request.descripcion:
@@ -76,7 +69,7 @@ class ProductServicer(product_pb2_grpc.ProductServiceServicer):
         with self._get_session() as session:
             product = session.get(Producto, request.id)
             if not product:
-                context.abort(grpc.StatusCode.NOT_FOUND, "Product not found")
+                context.abort(grpc.StatusCode.NOT_FOUND, "Producto no encontrado") 
             
             session.delete(product)
             session.commit()
@@ -95,6 +88,6 @@ async def serve_grpc():
     product_pb2_grpc.add_ProductServiceServicer_to_server(ProductServicer(), server)
     listen_addr = '[::]:50051'
     server.add_insecure_port(listen_addr)
-    print(f"Starting gRPC server on {listen_addr}")
+    print(f"Servidor gRPC escuchando en {listen_addr}")
     await server.start()
     await server.wait_for_termination()

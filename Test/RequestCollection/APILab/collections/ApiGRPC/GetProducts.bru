@@ -1,5 +1,5 @@
 meta {
-  name: Get Productos
+  name: GetProducts
   type: grpc
   seq: 1
 }
@@ -8,7 +8,7 @@ grpc {
   url: {{url}}
   method: /product.ProductService/ListProducts
   body: grpc
-  protoPath: ../../../../../../../../../../dev/apilab/grpcAPI/protos/product.proto
+  protoPath: ../../../../../grpcAPI/protos/product.proto
   auth: none
   methodType: unary
 }

@@ -26,7 +26,7 @@ class Query:
                 results = await session.exec(statement)
                 return results.all()
         except Exception as e:
-            logger.error(f"Error fetching productos: {e}", exc_info=True)
+            logger.error(f"Error al obtener productos: {e}", exc_info=True)
             raise Exception("Error interno al obtener productos") from e
 
 # Define Mutation
@@ -48,7 +48,7 @@ class Mutation:
                 await session.refresh(db_producto)
                 return db_producto
         except Exception as e:
-            logger.error(f"Error creating producto: {e}", exc_info=True)
+            logger.error(f"Error al crear producto: {e}", exc_info=True)
             raise Exception("Error interno al crear producto") from e
 
     @strawberry.mutation
@@ -74,7 +74,7 @@ class Mutation:
                 await session.refresh(db_producto)
                 return db_producto
         except Exception as e:
-            logger.error(f"Error updating producto {id}: {e}", exc_info=True)
+            logger.error(f"Error al actualizar producto {id}: {e}", exc_info=True)
             raise Exception(f"Error interno al actualizar producto {id}") from e
 
     @strawberry.mutation
@@ -91,7 +91,7 @@ class Mutation:
                 await session.commit()
                 return True
         except Exception as e:
-            logger.error(f"Error deleting producto {id}: {e}", exc_info=True)
+            logger.error(f"Error al eliminar producto {id}: {e}", exc_info=True)
             raise Exception(f"Error interno al eliminar producto {id}") from e
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)

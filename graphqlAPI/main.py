@@ -57,7 +57,11 @@ async def lifespan(app: FastAPI):
             await session.commit()
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="API (FastAPI + GraphQL)",
+    description="API para mantener entidad Producto usando GraphQL",
+    version="1.0.0",
+    lifespan=lifespan)
 
 # Middleware para logging de requests
 @app.middleware("http")
@@ -79,20 +83,20 @@ async def global_exception_handler(request: Request, exc: Exception):
     logger.error(f"Global exception: {str(exc)}", exc_info=True)
     return JSONResponse(
         status_code=500,
-        content={"detail": "Internal Server Error", "error": str(exc)},
+        content={"detail": "Error interno del servidor", "error": str(exc)},
     )
 
 graphql_app = GraphQLRouter(schema)
 
 app.include_router(graphql_app, prefix="/graphql")
 
-@app.get("/api/v1/productos/")
+@app.get("/products/")
 async def get_products():
     async for session in get_session():
         result = await session.exec(select(Producto))
         return result.all()
 
-@app.post("/api/v1/productos/", response_model=Producto)
+@app.post("/products/", response_model=Producto)
 async def create_product(producto: ProductoCreate):
     async for session in get_session():
         db_product = Producto.model_validate(producto)
@@ -101,12 +105,12 @@ async def create_product(producto: ProductoCreate):
         await session.refresh(db_product)
         return db_product
 
-@app.put("/api/v1/productos/{id}", response_model=Producto)
+@app.put("/products/{id}", response_model=Producto)
 async def update_product(id: int, producto: ProductoUpdate):
     async for session in get_session():
         db_product = await session.get(Producto, id)
         if not db_product:
-            raise HTTPException(status_code=404, detail="Product not found")
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
         product_data = producto.model_dump(exclude_unset=True)
         db_product.sqlmodel_update(product_data)
         db_product.fecha_actualizacion = datetime.now()
@@ -115,12 +119,12 @@ async def update_product(id: int, producto: ProductoUpdate):
         await session.refresh(db_product)
         return db_product
 
-@app.delete("/api/v1/productos/{id}")
+@app.delete("/products/{id}")
 async def delete_product(id: int):
     async for session in get_session():
         db_product = await session.get(Producto, id)
         if not db_product:
-            raise HTTPException(status_code=404, detail="Product not found")
+            raise HTTPException(status_code=404, detail="Producto no encontrado")
         await session.delete(db_product)
         await session.commit()
         return {"ok": True}
