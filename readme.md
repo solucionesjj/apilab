@@ -11,8 +11,7 @@ Este proyecto se realizó para la materia de Arquitectura de aplicaciones web, c
 - GraphQL
 
 *Nota: Cada uno de estos patrones se implementó en su propia carpeta, con su respectivo README.md para facilitar la comprensión y ejecución de cada uno.*
-*Nota: En la carpeta Test se encuentra la colección de peticiones para probar las APIs implementadas. Esta colección se puede importar en Bruno. ![Bruno Home Site](https://www.usebruno.com/)*
-
+*Nota: En la carpeta Test se encuentra la colección de peticiones para probar las APIs implementadas. Esta colección se puede importar en Bruno. https://www.usebruno.com/*
 
 **Arquitectura de aplicaciones Web**
 Unidad 4 - Actividad Sumativa
@@ -21,4 +20,5 @@ Profesor: **Wilson Eduardo Soto Forero**
 **Institución Universitaria Politécnico Grancolombiano**
 Escuela de tecnologías de la información y las comunicaciones
 Maestría en Arquitectura de Software
+
 
